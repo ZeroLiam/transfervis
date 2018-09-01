@@ -1,6 +1,14 @@
 from datetime import date
 import tornado.ioloop
 import tornado.web
+import base64
+
+# tweeter API Initial Setup
+client_key = 'MyKeyHere'
+client_secret = 'MySecretHere'
+key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
+b64_encoded_key = base64.b64encode(key_secret)
+b64_encoded_key = b64_encoded_key.decode('ascii')
 
 
 class VersionHandler(tornado.web.RequestHandler):
