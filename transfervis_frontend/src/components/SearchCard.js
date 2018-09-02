@@ -30,9 +30,9 @@ class SearchCard extends Component {
         );
     }
 
-    getStatic(){
-        return();
-    }
+    // getStatic(){
+    //     return();
+    // }
 
   render() {
     return (
