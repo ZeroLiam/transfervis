@@ -26,3 +26,7 @@
 .searchcard .carousel-item {
     font-size: 0.8rem;
 }
+
+header h1 {
+    color: var(--light-color);
+}

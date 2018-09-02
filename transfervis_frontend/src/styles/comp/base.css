@@ -110,7 +110,7 @@ body {
     background-image: url("./../../assets/texture.png");
     animation-timing-function: ease-in-out;
     animation: animatedBackground 80s linear infinite;
-    margin: 2rem;
+    margin: 1rem;
 }
 
 h1,

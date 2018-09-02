@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 12px sans-serif;
+}
+
+path {
+  stroke-width: 1px;
+  stroke: white;
+  fill: #999;
+  cursor: pointer;
+}
+
+path.q0-3 {
+  fill: #ece7f2;
+}
+
+path.q1-3 {
+  fill: #a6bddb;
+}
+
+path.q2-3 {
+  fill: #2b8cbe;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+//Map dimensions (in pixels)
+var width = 498,
+    height = 600;
+
+//Map projection
+var projection = d3.geo.conicEqualArea()
+    .scale(5261.64939607282)
+    .center([-1.464219263856116,52.5612078903616]) //projection center
+    .parallels([49.86474946193845,55.81107189401146]) //parallels for conic projection
+    .rotate([1.464219263856116]) //rotation for conic projection
+    .translate([223.73154180207496,329.68261055776594]) //translate to center the map in view
+
+//Generate paths based on projection
+var path = d3.geo.path()
+    .projection(projection);
+
+//Create an SVG
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+//Group for the map features
+var features = svg.append("g")
+    .attr("class","features");
+
+//Create choropleth scale
+var color = d3.scale.quantize()
+    .domain([0,1])
+    .range(d3.range(3).map(function(i) { return "q" + i + "-3"; }));
+
+//Create zoom/pan listener
+//Change [1,Infinity] to adjust the min/max zoom scale
+var zoom = d3.behavior.zoom()
+    .scaleExtent([1, Infinity])
+    .on("zoom",zoomed);
+
+svg.call(zoom);
+
+d3.json("topo_lad.topojson",function(error,geodata) {
+  if (error) return console.log(error); //unknown error, check the console
+
+  //Create a path for each map feature in the data
+  features.selectAll("path")
+    .data(topojson.feature(geodata,geodata.objects.lad).features) //generate features from TopoJSON
+    .enter()
+    .append("path")
+    .attr("d",path)
+    .attr("class", function(d) { return (typeof color(d.properties.LAD13CD) == "string" ? color(d.properties.LAD13CD) : ""); })
+    .on("click",clicked);
+
+});
+
+// Add optional onClick events for features here
+// d.properties contains the attributes (e.g. d.properties.name, d.properties.population)
+function clicked(d,i) {
+
+}
+
+
+//Update map on zoom/pan
+function zoomed() {
+  features.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")")
+      .selectAll("path").style("stroke-width", 1 / zoom.scale() + "px" );
+}
+
+</script>
