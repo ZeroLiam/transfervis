@@ -1,2 +1,28 @@
+@import url('./comp/theme.css');
 @import url('./comp/variables.css');
 @import url('./comp/base.css');
+.search-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    margin: 0;
+}
+
+.searchcard {
+    /* max-width: 280px; */
+    max-height: 150px;
+    margin: 0.2rem;
+    padding: 0.2rem;
+    text-align: center;
+}
+
+.searchcard .card-title {
+    font-size: 0.9rem;
+}
+
+.searchcard .carousel-item {
+    font-size: 0.8rem;
+}
