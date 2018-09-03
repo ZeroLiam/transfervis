@@ -6,7 +6,7 @@ import tornado.gen
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import tornado.escape
 import xml.sax.saxutils
-import urlparse
+# import urlparse
 
 class TemplateRendering:
     """

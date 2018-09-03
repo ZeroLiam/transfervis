@@ -30,6 +30,10 @@
     "watchify": "^2.1.1"
   },
   "dependencies": {
-    "react": "^0.12.0"
+    "node-sass": "^4.9.3",
+    "npm": "^6.4.1",
+    "npm-sass": "^2.3.0",
+    "react": "^0.12.0",
+    "sass": "^1.13.1"
   }
 }
