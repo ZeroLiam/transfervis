@@ -30,3 +30,55 @@
 header h1 {
     color: var(--light-color);
 }
+
+.map-component {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.map-component iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 498px;
+    height: 600px;
+    border: none;
+}
+
+path {
+    stroke-width: 1px;
+    stroke: white;
+    fill: #999;
+    cursor: pointer;
+}
+
+path.q0-5 {
+    fill: #f0f9e8;
+}
+
+path.q1-5 {
+    fill: #bae4bc;
+}
+
+path.q2-5 {
+    fill: #7bccc4;
+}
+
+path.q3-5 {
+    fill: #43a2ca;
+}
+
+path.q4-5 {
+    fill: #0868ac;
+}
+
+div.tooltip {
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    font-weight: bold;
+    padding: 4px 8px;
+    display: none;
+}

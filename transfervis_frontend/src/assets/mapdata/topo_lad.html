@@ -13,16 +13,34 @@ path {
   cursor: pointer;
 }
 
-path.q0-3 {
-  fill: #ece7f2;
+path.q0-5 {
+  fill: #f0f9e8;
 }
 
-path.q1-3 {
-  fill: #a6bddb;
+path.q1-5 {
+  fill: #bae4bc;
 }
 
-path.q2-3 {
-  fill: #2b8cbe;
+path.q2-5 {
+  fill: #7bccc4;
+}
+
+path.q3-5 {
+  fill: #43a2ca;
+}
+
+path.q4-5 {
+  fill: #0868ac;
+}
+
+div.tooltip {
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  font-weight: bold;
+  padding: 4px 8px;
+  display: none;
 }
 
 </style>
@@ -59,7 +77,7 @@ var features = svg.append("g")
 //Create choropleth scale
 var color = d3.scale.quantize()
     .domain([0,1])
-    .range(d3.range(3).map(function(i) { return "q" + i + "-3"; }));
+    .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }));
 
 //Create zoom/pan listener
 //Change [1,Infinity] to adjust the min/max zoom scale
@@ -68,6 +86,9 @@ var zoom = d3.behavior.zoom()
     .on("zoom",zoomed);
 
 svg.call(zoom);
+
+//Create a tooltip, hidden at the start
+var tooltip = d3.select("body").append("div").attr("class","tooltip");
 
 d3.json("topo_lad.topojson",function(error,geodata) {
   if (error) return console.log(error); //unknown error, check the console
@@ -79,6 +100,9 @@ d3.json("topo_lad.topojson",function(error,geodata) {
     .append("path")
     .attr("d",path)
     .attr("class", function(d) { return (typeof color(d.properties.LAD13CD) == "string" ? color(d.properties.LAD13CD) : ""); })
+    .on("mouseover",showTooltip)
+    .on("mousemove",moveTooltip)
+    .on("mouseout",hideTooltip)
     .on("click",clicked);
 
 });
@@ -96,4 +120,26 @@ function zoomed() {
       .selectAll("path").style("stroke-width", 1 / zoom.scale() + "px" );
 }
 
+
+//Position of the tooltip relative to the cursor
+var tooltipOffset = {x: 5, y: -25};
+
+//Create a tooltip, hidden at the start
+function showTooltip(d) {
+  moveTooltip();
+
+  tooltip.style("display","block")
+      .text(d.properties.LAD13CD);
+}
+
+//Move the tooltip to track the mouse
+function moveTooltip() {
+  tooltip.style("top",(d3.event.pageY+tooltipOffset.y)+"px")
+      .style("left",(d3.event.pageX+tooltipOffset.x)+"px");
+}
+
+//Create a tooltip, hidden at the start
+function hideTooltip() {
+  tooltip.style("display","none");
+}
 </script>
