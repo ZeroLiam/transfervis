@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SearchCard from './../components/SearchCard';
+import Map from './../components/Map';
 import _ from 'lodash';
 
 class Main extends Component {
@@ -11,6 +11,10 @@ class Main extends Component {
         <header className="App-header">
           <h1>Twitter Premier League</h1>
         </header>
+
+        <div id="map_container">
+          <Map id="main_england" />
+        </div>
         
       </div>
     );
