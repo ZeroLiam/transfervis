@@ -17,10 +17,10 @@ api = twitter.Api(consumer_key=consumer_key,
                   access_token_secret=access_token_secret)
 
 
-class TwitterApi():
+class TwitterApi:
     def __init__(self, query=None, count=None, location=None, radius=None, result_type='mixed', id_user=None):
         self.query = query
-        self.count = count if count is not None else 50
+        self.count = count if count is not None else 100
         if result_type in result_test:
             self.result_type = result_type
         else:
@@ -43,8 +43,8 @@ class TwitterApi():
     def results(self):
         results = api.GetSearch(term=self.query, geocode=self.geocode, count=self.count, include_entities=True,
                                 return_json=True)
-        print(results)
-        with open('data.json', 'a') as outfile:
+        name = self.query[1:]+'.json'
+        with open(name, 'a') as outfile:
             # for result in results:
             json.dump(results, outfile, indent=2)
         return results
@@ -55,6 +55,43 @@ class TwitterApi():
 
 # twitter_api = TwitterApi('@LFC', 50, "liverpool", 50)
 twitter_api = TwitterApi('@LFC')
-print(twitter_api.results())
+twitter_api1 = TwitterApi('@premierleague')
+twitter_api2 = TwitterApi('@ChelseaFC')
+twitter_api3 = TwitterApi('@WatfordFC')
+twitter_api4 = TwitterApi('@ManCity')
+twitter_api5 = TwitterApi('@SpursOfficial')
+twitter_api6 = TwitterApi('@afcbournemouth')
+twitter_api7 = TwitterApi('@Everton')
+twitter_api8 = TwitterApi('@LCFC')
+twitter_api9 = TwitterApi('@Arsenal')
+twitter_api10 = TwitterApi('@ManUtd')
+twitter_api11 = TwitterApi('@Wolves')
+twitter_api12 = TwitterApi('@SouthamptonFC')
+twitter_api13 = TwitterApi('@FulhamFC')
+twitter_api14 = TwitterApi('@OfficialBHAFC')
+twitter_api15 = TwitterApi('@CPFC')
+twitter_api16 = TwitterApi('@CardiffCityFC')
+twitter_api17 = TwitterApi('@htafcdotcom')
+twitter_api18 = TwitterApi('@NUFC')
+twitter_api19 = TwitterApi('@BurnleyOfficial')
+twitter_api20 = TwitterApi('@@WestHamUtd')
+print(twitter_api3.results())
+print(twitter_api4.results())
+print(twitter_api5.results())
+print(twitter_api6.results())
+print(twitter_api7.results())
+print(twitter_api8.results())
+print(twitter_api9.results())
+print(twitter_api10.results())
+print(twitter_api11.results())
+print(twitter_api12.results())
+print(twitter_api13.results())
+print(twitter_api14.results())
+print(twitter_api15.results())
+print(twitter_api16.results())
+print(twitter_api17.results())
+print(twitter_api18.results())
+print(twitter_api19.results())
+print(twitter_api20.results())
 # print(twitter_api.get_user())
 # print(gn.geocode("liverpool").raw)
