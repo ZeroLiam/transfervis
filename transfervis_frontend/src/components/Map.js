@@ -77,7 +77,7 @@ class Map extends Component {
             scale: 4000,
           }}
           style={{ width: "100%" }}>
-            <ZoomableGroup  center={[10,52]} zoom={ this.state.zoom }>
+            <ZoomableGroup  center={[12,52]} zoom={ this.state.zoom }>
               <Geographies geography={england_det_topojson} disableOptimization> 
                 {(geographies, projection) => geographies.map((geography, i) => (
                   <Geography
