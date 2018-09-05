@@ -1,6 +1,7 @@
 @import url('./comp/theme.css');
 @import url('./comp/variables.css');
 @import url('./comp/base.css');
+@import url('./comp/map.css');
 .search-container {
     display: flex;
     flex-wrap: wrap;

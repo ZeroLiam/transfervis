@@ -98,6 +98,114 @@ a {
     border-radius: 3px;
 }
 
+.btn-primary {
+    color: var(--base-font-alt-color);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    color: var(--base-font-alt-color);
+    background-color: var(--primary-deep-color);
+    border-color: var(--primary-deep-color);
+}
+
+.btn-secondary {
+    color: var(--base-font-alt-color);
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    color: var(--base-font-alt-color);
+    background-color: var(--secondary-deep-color);
+    border-color: var(--secondary-deep-color);
+}
+
+.btn-success {
+    color: var(--base-font-alt-color);
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-success:hover {
+    color: var(--base-font-alt-color);
+    background-color: var(--success-deep-color);
+    border-color: var(--success-deep-color);
+}
+
+.btn-danger {
+    color: var(--base-font-alt-color);
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+.btn-danger:hover {
+    color: var(--base-font-alt-color);
+    background-color: var(--danger-deep-color);
+    border-color: var(--danger-deep-color);
+}
+
+.btn-warning {
+    color: var(--base-font-color-deep);
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.btn-warning:hover {
+    color: var(--base-font-color-deep);
+    background-color: var(--warning-deep-color);
+    border-color: var(--warning-deep-color);
+}
+
+.btn-info {
+    color: var(--base-font-alt-color);
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+}
+
+.btn-info:hover {
+    color: var(--base-font-alt-color);
+    background-color: var(--info-deep-color);
+    border-color: var(--info-deep-color);
+}
+
+.btn-light {
+    color: var(--base-font-color-deep);
+    background-color: var(--light-color);
+    border-color: var(--light-color);
+}
+
+.btn-light:hover {
+    color: var(--base-font-color-deep);
+    background-color: var(--light-deep-color);
+    border-color: var(--light-deep-color);
+}
+
+.btn-dark {
+    color: var(--base-font-alt-color);
+    background-color: var(--dark-color);
+    border-color: var(--dark-color);
+}
+
+.btn-dark:hover {
+    color: var(--base-font-alt-color);
+    background-color: var(--base-color);
+    border-color: var(--base-color);
+}
+
+.btn-link {
+    font-weight: var(--base-font-weight-bold);
+    color: var(--primary-color);
+    background-color: transparent;
+}
+
+.btn-link:hover {
+    font-weight: var(--base-font-weight-bold);
+    color: var(--primary-deep-color);
+    background-color: transparent;
+}
+
 body {
     font-family: var(--text);
     font-weight: var(--base-font-weight);
@@ -106,10 +214,6 @@ body {
     color: var(--base-font-color);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--sea-color);
-    background-image: url("./../../assets/texture.png");
-    animation-timing-function: ease-in-out;
-    animation: animatedBackground 80s linear infinite;
     margin: 2rem;
 }
 
@@ -156,16 +260,4 @@ blockquote {
 
 strong {
     font-weight: var(--strong);
-}
-
-
-/* Animations */
-
-@keyframes animatedBackground {
-    from {
-        background-position: 0 0;
-    }
-    to {
-        background-position: 30% 100%;
-    }
 }

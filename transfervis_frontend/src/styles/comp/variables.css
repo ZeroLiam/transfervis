@@ -50,13 +50,20 @@
     --p-size: 0.9rem;
     /* // 06. COLORS */
     --primary-color: #007bff;
+    --primary-deep-color: #0069d9;
     --secondary-color: #6c757d;
+    --secondary-deep-color: #5a6268;
     --success-color: #28a745;
+    --success-deep-color: #218838;
     --danger-color: #dc3545;
+    --danger-deep-color: #c82333;
     --warning-color: #ffc107;
+    --warning-deep-color: #e0a800;
     --info-color: #17a2b8;
+    --info-deep-color: #138496;
     --base-color: #292929;
     --dark-color: #343a40;
     --light-color: #f8f9fa;
+    --light-deep-color: #e2e6ea;
     --sea-color: #03a9f4e6;
 }
