@@ -37,15 +37,18 @@ header h1 {
     position: relative;
 }
 
-.map-component iframe {
+
+/* .map-component iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 498px;
     height: 600px;
     border: none;
-}
+} */
 
+
+/* 
 path {
     stroke-width: 1px;
     stroke: white;
@@ -85,4 +88,4 @@ div.tooltip {
 
 path {
     fill: fuchsia !important;
-}
+} */
