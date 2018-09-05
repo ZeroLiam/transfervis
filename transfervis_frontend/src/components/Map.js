@@ -11,8 +11,10 @@ class Map extends Component {
         super(props);
 
         this.state = {
-            width: 10,
+            width: (this.props.width/18 * 100),
             height: 10,
+            posx: (this.props.width/2 + 150),
+            posy: (this.props.width/15 * 100),
             event: false,
             world: {},
             zoom: 1
@@ -23,37 +25,46 @@ class Map extends Component {
     }
 
     onMapMouseWheel(evt){
-        console.log(evt);
-        console.log(evt.deltaY);
+        let mousezoom = evt.deltaY;
+        var unit = evt.deltaMode;
+        console.log("this.state.width: ", this.state.width, "this.width.zoom: ", this.state.zoom, "evt.deltaY: ", evt.deltaY , evt.deltaMode, " unit");
+        
+        if(mousezoom > 0){
+            this.handleZoomIn();
+        }else{
+            this.handleZoomOut();
+        }
     }
 
     handleZoomIn() {
         this.setState({
             zoom: this.state.zoom * 0.5,
+            width: this.state.width * 0.5,
+            posx: this.state.posx * 0.5,
+            posy: this.state.posy * 0.5
         });
     }
 
     handleZoomOut() {
         this.setState({
             zoom: this.state.zoom / 0.5,
+            width: this.state.width / 0.5,
+            posx: this.state.posx / 0.5,
+            posy: this.state.posy / 0.5
         });
     }
 
   render() {
-      
+    console.log("this.state.width: ", this.state.width, "this.state.posx: ", this.state.posx, "this.state.posy: ", this.state.posy);
+
   return (
     <div onWheel={this.onMapMouseWheel}>
     <svg width={this.props.width} height={this.props.height}>
-      <RadialGradient
-        id="geo_mercator_radial"
-        from="#55bdd5"
-        to="#4f3681"
-        r={'80%'}
-      />
       <Mercator
         data={world.features}
-        scale={this.props.width/20 * 100}
-        translate={[340,3000]}
+        scale={this.state.width}
+        translate={[this.state.posx,this.state.posy]}
+        // center={[10,100]}
         fill={() => '#8be4c5'}
         stroke={() => '#5fcfa7'}
         onClick={data => event => {
