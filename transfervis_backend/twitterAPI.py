@@ -42,42 +42,37 @@ class TwitterApi:
             self.geocode = None
 
     def results(self):
-        datas =[]
         results = api.GetSearch(term=self.query, geocode=self.geocode, count=self.count, include_entities=True,
                                 return_json=True)
-        name = self.query[1:]+'.json'
+        name = self.query[1:] + '.json'
         with open(name, 'r') as outfile:
             datas = json.load(outfile)
-        # results = json.load(results)
-        merged_dict = datas.copy()
-        merged_dict.update(results)
-        with open(name, 'a') as outfile:
-            json.dump(merged_dict, outfile, indent=2)
-        self.check_json_file(name)
+        merged_dict = datas['statuses']
+        metadata = datas["search_metadata"]
+        results = json.dumps(results)
+        results = json.loads(results)
+        merged_dict.extend(results['statuses'])
+        data = {"statuses": merged_dict, "search_metadata": metadata}
+        data = self.check_json_data(data)
+        with open(name, 'w') as outfile:
+            json.dump(data, outfile, indent=2)
         return results
 
     def get_user(self):
         return api.GetUser(user_id=self.id_user)
 
-    def check_json_file(self,name):
+    def check_json_data(self, datas):
         test_id = []
         rewritefile = []
         file1 = {}
-        datas = []
-        with codecs.open(name,'rU') as f:
-            for line in f:
-                datas.append(json.loads(line))
-
-        for data in datas['statuses']:
+        for data in datas["statuses"]:
             if data['id'] not in test_id:
-                test_id.append(int(data['id']))
+                test_id.append(data['id'])
                 rewritefile.append(data)
-        with open(name, 'w') as outfile:
-            # for result in results:
-            file1['statuses'] = rewritefile
-            file1["search_metadata"] = datas["search_metadata"]
-            json.dump(file1, outfile, indent=2)
-        return rewritefile
+        datas["search_metadata"]["count"] = len(test_id)
+        file1['statuses'] = rewritefile
+        file1["search_metadata"] = datas["search_metadata"]
+        return file1
 
 
 # twitter_api = TwitterApi('@LFC', 50, "liverpool", 50)
