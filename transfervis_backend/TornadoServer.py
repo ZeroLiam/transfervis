@@ -50,16 +50,18 @@ class MainHandler(tornado.web.RequestHandler):
 
     def get(self):
         response = self.get_json_data()
-        self.write(response)
+        print(response)
+        # self.write(response)
         self.render('trail.html', items=response)
 
     def get_json_data(self):
         response = []
-        for filename in glob.glob('*.txt'):
+        for filename in glob.glob('*.json'):
             with open(filename, 'r') as outfile:
                 datas = json.load(outfile)
                 temp_array = {}
                 for data in datas["statuses"]:
+                    print(data)
                     temp_array.update({'created_at': data['created_at']})
                     temp_array.update({'id_str': data['id_str']})
                     temp_array.update({'name': data['user']['name']})
@@ -76,7 +78,7 @@ def main():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/getnewdata", VersionHandler)
-    ])
+    ], debug=True)
 
 
 if __name__ == "__main__":
