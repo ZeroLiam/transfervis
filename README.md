@@ -16,3 +16,15 @@ Made in React under `transfervis_frontend` folder.
 
 ## Back End
 Made in Tornado under `transfervis_backend` folder.
+
+## requirments
+    data.json
+    1) created_at
+    2) id_str
+    3) name
+    4) Screen_name
+    5) location
+    6) hastags
+    7) user_mentions
+    8) retweet_count
+    9) favorite_count
