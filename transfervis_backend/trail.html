@@ -7,8 +7,12 @@
 <body>
 
 <ul>
-    {% for item in items %}
-    <li>{{ escape(item) }}</li>
+    {% for itemz in items %}
+    {% for key,item in itemz.items() %}
+
+    <li>key:{{ key }}</li>
+    <li>item:{{ item }}</li>
+    {% end %}
     {% end %}
 </ul>
 </body>

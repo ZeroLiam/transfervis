@@ -51,7 +51,7 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         response = self.get_json_data()
         print(response)
-        # self.write(response)
+        self.write(json.dumps(response))
         self.render('trail.html', items=response)
 
     def get_json_data(self):
@@ -61,7 +61,6 @@ class MainHandler(tornado.web.RequestHandler):
                 datas = json.load(outfile)
                 temp_array = {}
                 for data in datas["statuses"]:
-                    print(data)
                     temp_array.update({'created_at': data['created_at']})
                     temp_array.update({'id_str': data['id_str']})
                     temp_array.update({'name': data['user']['name']})
@@ -77,7 +76,7 @@ class MainHandler(tornado.web.RequestHandler):
 def main():
     return tornado.web.Application([
         (r"/", MainHandler),
-        (r"/getnewdata", VersionHandler)
+        # (r"/getnewdata", VersionHandler)
     ], debug=True)
 
 
