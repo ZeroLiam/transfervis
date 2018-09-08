@@ -38,10 +38,10 @@ header {
     height: 2rem;
     position: relative;
     top: 0;
-    left: 1rem;
+    left: 2rem;
     margin-left: 1rem;
     padding-left: 2rem;
-    width: 100%;
+    width: 95%;
     border-bottom-color: #2C5364;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -61,34 +61,51 @@ h1.app-title {
     position: absolute;
     top: 0;
     left: 0;
-    width: 4rem;
+    width: 5rem;
     height: 100%;
 }
 
+.left-sidebar-container {
+    max-height: 4rem;
+}
+
 .left-sidebar-icon {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 4rem;
     padding: 1rem;
-    line-height: 2rem;
+    line-height: 1.5rem;
     text-align: center;
     cursor: pointer;
+    font-weight: 300;
+}
+
+.left-sidebar-icon span,
+.left-sidebar-icon i,
+.left-sidebar-icon svg {
+    pointer-events: none;
 }
 
 .left-sidebar-icon:hover,
-.left-sidebar-icon.hover {
-    background: #75D7BB;
+.hover {
+    background: #1F98AC;
+    color: var(--dark-color);
+}
+
+.active-feature {
+    color: #0bff15;
+    transition: all 0.33s linear ease-in;
 }
 
 .searchbar {
-    display: none;
+    /* display: none; */
     position: relative;
-    top: 0;
-    left: 4rem;
+    top: -4rem;
+    left: 5rem;
     padding: 0.2rem 0;
     width: 275px;
     height: 4rem;
-    background: #75D7BB;
+    background: #1F98AC;
 }
 
 .searchbar:before {
@@ -107,7 +124,7 @@ h1.app-title {
     width: 95%;
     margin: 0.5rem 1rem;
     background: #ffffff;
-    border-bottom-color: #ccc;
+    border-bottom-color: #1F98AC;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     position: relative;
@@ -117,6 +134,7 @@ h1.app-title {
 }
 
 .searchbar-btn-ic {
+    color: rgb(132, 192, 255);
     position: relative;
     display: inline-block;
     top: -74%;
@@ -127,10 +145,17 @@ h1.app-title {
     line-height: 1rem;
     padding: 0.4rem 0.6rem;
     cursor: pointer;
-    border-left-color: #ccc;
+    border-left-color: #1F98AC;
     border-left-style: solid;
     border-left-width: 1px;
     background-color: white;
+}
+
+.icon-left-title {
+    position: relative;
+    font-size: 0.9rem;
+    text-align: center;
+    top: -8px;
 }
 
 

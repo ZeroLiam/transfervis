@@ -43,6 +43,8 @@ textarea:focus {
 
 input,
 textarea {
+    font-family: var(--text);
+    font-weight: 300;
     border: none;
 }
 
