@@ -225,7 +225,7 @@ h5,
 h6 {
     font-family: var(--titles);
     color: var(--base-font-color);
-    font-weight: var(--strong);
+    font-weight: 300;
     line-height: var(--lineheight-base);
     margin: var(--margin-sm) 0 var(--margin-sm);
 }

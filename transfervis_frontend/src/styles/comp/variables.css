@@ -1,6 +1,6 @@
 /* // 01. IMPORTS */
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:500,600|Rubik:300,500');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,600|Rubik:300,500');
 * {
     /* // 02. FONTS */
     --titles: "Montserrat", Roboto, "Segoe UI", sans-serif;
@@ -66,4 +66,5 @@
     --light-color: #f8f9fa;
     --light-deep-color: #e2e6ea;
     --sea-color: #03a9f4e6;
+    --white-color: #ffffff;
 }

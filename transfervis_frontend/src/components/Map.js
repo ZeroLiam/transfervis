@@ -72,18 +72,22 @@ class Map extends Component {
     onMapMove(evt){
         var deltaX = evt.pageX;
         var deltaY = evt.pageY;
+        var enabledZoom = this.state.zoom > 1;
 
         if(this.state.maptaken){
             this.setState((state)=>{
                 return {startMove: state.startMove + 1}
             });
 
-            if(this.state.startMove > 1){
+            if(this.state.startMove > 1 && enabledZoom){
                 var mouseDiffX = this.state.lastMousePosX - deltaX;
                 var mouseDiffY = this.state.lastMousePosY - deltaY;
+                var map = $("#_mapEngland").position();
+                // console.log("zoom: ", zoom, "map x: ", map.left, "map y: ", map.top);
+
                 this.setState((state) => {
                     
-                    return {transX: -1 * mouseDiffX, transY: -1 *mouseDiffY}
+                    return {transX: -1 * mouseDiffX, transY: -1 * mouseDiffY}
                   });
             }
             
@@ -126,7 +130,6 @@ class Map extends Component {
         data={world.features}
         scale={this.state.width}
         translate={[this.state.posx,this.state.posy]}
-        // center={[10,100]}
         fill={() => '#8be4c5'}
         stroke={() => '#5fcfa7'}
         // onClick={data => event => {
