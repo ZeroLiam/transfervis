@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
+import eplogo from './../assets/logos/00_eplnew.png';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faPollH, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faPollH, faSearch, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 
 // Add all icons to the library so you can use it in your page
-library.add(faPollH, faTwitter);
+library.add(faPollH, faGlobeAmericas);
 
 class LeftSidebar extends Component{
     constructor(props){
@@ -38,13 +38,15 @@ class LeftSidebar extends Component{
 
             if(this.state.openSearch){
                 $(".searchbar").show(200);
+                $("#search-btn svg").toggleClass("active-feature");
                 $("#search-btn").addClass("hover");
             }else{
                 $(".searchbar").hide(200);
+                $("#search-btn svg").toggleClass("active-feature");
                 $("#search-btn").removeClass("hover");
             }
-        }else if(evt.target.id == "enable-stats-btn"){
-            $("#enable-stats-btn svg").toggleClass("active-feature");
+        }else if(evt.target.id == "enable-map-btn"){
+            $("#enable-map-btn svg").toggleClass("active-feature");
         }else if(evt.target.id == "enable-sankey-btn"){
             $("#enable-sankey-btn svg").toggleClass("active-feature");
         }
@@ -53,7 +55,10 @@ class LeftSidebar extends Component{
     render(){
         return(
             <div className="left-sidebar">
-                <br /> <br/>  <br/>
+                {/* EPL logo */}
+                <div className="left-sidebar-container" id="left-epllogo">
+                    <img src={eplogo} />
+                </div>
 
                 {/* Toggle search */}
                 <div className="left-sidebar-container" id="left-search">
@@ -67,16 +72,16 @@ class LeftSidebar extends Component{
                     </div>
                 </div>
 
-                {/* Toggle Tweet stats */}
-                <div className="left-sidebar-container" id="left-toggle-stats">
-                    <div className="left-sidebar-icon" id="enable-stats-btn"
+                {/* Toggle Map view */}
+                <div className="left-sidebar-container" id="left-toggle-map">
+                    <div className="left-sidebar-icon" id="enable-map-btn"
                     onClick={(...args)=> this.onIconClick(...args)}>
-                            <FontAwesomeIcon icon={faTwitter} />
-                            <span className="icon-left-title">Stats</span>
-                        </div>
+                            <FontAwesomeIcon icon={faGlobeAmericas} />
+                            <span className="icon-left-title">Map</span>
+                    </div>
                 </div>
 
-                {/* Toggle Sankey Diagrams */}
+                {/* Toggle Sankey View */}
                 <div className="left-sidebar-container" id="left-toggle-sankey">
                     <div className="left-sidebar-icon" id="enable-sankey-btn"
                     onClick={(...args)=> this.onIconClick(...args)}>

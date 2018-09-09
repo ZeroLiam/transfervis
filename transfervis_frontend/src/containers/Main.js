@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LeftSidebar from './../components/LeftSidebar';
 import Header from './../components/Header';
+import World from './../components/World';
 
 class Main extends Component {
 
@@ -9,6 +10,7 @@ class Main extends Component {
       <div className="App">
         <LeftSidebar />
         <Header />
+        <World id="_worldmap" width="800" height="480" events="true" />
       </div>
     );
   }
