@@ -1,0 +1,42 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-122.09,
+                    37.64
+                ]
+            },
+            "properties": {
+                "tweet_body": "I freaking love maps!",
+                "handle": "Brian Lehman"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    101.6,
+                    3.18
+                ]
+            },
+            "properties": {
+                "tweet_body": "I love you @grandma_smarmy!",
+                "handle": "Uncle Smarmy"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-2.9611, 53.4308]
+            },
+            "properties": {
+                "tweet_body": "Liverpool BABY",
+                "handle": "Uncle MARINO"
+            }
+        }
+    ]
+}
