@@ -218,6 +218,7 @@ h1.app-title {
     width: 800px;
     height: 480px;
     border: 1px solid #01768a;
+    overflow: hidden;
 }
 
 .world-component svg {
@@ -228,4 +229,8 @@ h1.app-title {
     height: 100%;
     fill: rgba(177, 177, 177, 0.568);
     stroke: rgb(32, 56, 66);
+}
+
+.country {
+    cursor: pointer;
 }

@@ -10,7 +10,7 @@ class Main extends Component {
       <div className="App">
         <LeftSidebar />
         <Header />
-        <World id="_worldmap" width="800" height="480" events="true" />
+        <World id="_worldmap" width="560" height="370" events="true" />
       </div>
     );
   }
