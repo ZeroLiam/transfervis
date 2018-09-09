@@ -4,6 +4,12 @@ from tornado import ioloop, web
 import glob
 import json
 from transfervis_backend import twitterAPI
+from geopy import geocoders
+
+gn = geocoders.GeoNames(username='wassabi.vl')
+from pathlib import Path
+
+my_file = Path("data.json")
 
 
 class VersionHandler(tornado.web.RequestHandler):
@@ -51,25 +57,39 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         response = self.get_json_data()
         print(response)
-        self.write(json.dumps(response))
+        # self.write(json.dumps(response))
         self.render('trail.html', items=response)
 
     def get_json_data(self):
         response = []
         for filename in glob.glob('*.json'):
             with open(filename, 'r') as outfile:
-                datas = json.load(outfile)
-                temp_array = {}
-                for data in datas["statuses"]:
-                    temp_array.update({'created_at': data['created_at']})
-                    temp_array.update({'id_str': data['id_str']})
-                    temp_array.update({'name': data['user']['name']})
-                    temp_array.update({'screen_name': data['user']['screen_name']})
-                    temp_array.update({'location': data['user']['location']})
-                    temp_array.update({'user_mentions': data['entities']['user_mentions']})
-                    temp_array.update({'retweet_count': data['retweet_count']})
-                    temp_array.update({'favorite_count': data['favorite_count']})
-                    response.append(temp_array)
+                if outfile.name is not "data.json":
+                    datas = json.load(outfile)
+                    temp_array = {}
+                    for data in datas["statuses"]:
+                        temp_array.update({'created_at': data['created_at']})
+                        temp_array.update({'id_str': data['id_str']})
+                        temp_array.update({'name': data['user']['name']})
+                        temp_array.update({'screen_name': data['user']['screen_name']})
+                        temp_array.update({'location': data['user']['location']})
+                        if data['user']['location'] is not None or data['user']['location'] != "":
+                            try:
+                                lat_lon = gn.geocode(data['user']['location'])
+                                temp_array.update({'latitude': str(lat_lon.latitude)})
+                                temp_array.update({'longitude': str(lat_lon.longitude)})
+                            except:
+                                temp_array.update({'latitude': ""})
+                                temp_array.update({'longitude': ""})
+                        temp_array.update({'user_mentions': data['entities']['user_mentions']})
+                        temp_array.update({'retweet_count': data['retweet_count']})
+                        temp_array.update({'favorite_count': data['favorite_count']})
+                        with open('data.json', 'a') as outfile:
+                            outfile.write(',')
+                            json.dump(temp_array, outfile, indent=2)
+
+        with open(my_file, 'wr') as outfile:
+            response = json.load(outfile)
         return response
 
 
