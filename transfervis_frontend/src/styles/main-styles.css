@@ -42,6 +42,7 @@ header {
     margin-left: 1rem;
     padding-left: 2rem;
     width: 95%;
+    height: 2.8rem;
     border-bottom-color: #2C5364;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -51,6 +52,38 @@ h1.app-title {
     color: var(--white-color);
     font-size: 1.2rem;
     font-variant: small-caps;
+}
+
+.header-menu {
+    position: relative;
+    top: -10px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-items: space-around;
+}
+
+.header-team {
+    list-style: none;
+    width: 2rem;
+    height: auto;
+    margin: 6px;
+    padding: 2px;
+    align-self: center;
+    cursor: pointer;
+}
+
+.header-team img {
+    filter: grayscale(200%) contrast(150%) opacity(40%);
+    transform: scale(0.8);
+    transition: all 1 ease-in-out;
+}
+
+.header-team:hover img {
+    filter: grayscale(0%) contrast(100%) opacity(100%);
+    transform: scale(1.2);
+    transition: all 1 ease-in-out;
 }
 
 

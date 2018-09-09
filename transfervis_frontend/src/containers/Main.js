@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LeftSidebar from './../components/LeftSidebar';
+import Header from './../components/Header';
 
 class Main extends Component {
 
@@ -7,11 +8,7 @@ class Main extends Component {
     return (
       <div className="App">
         <LeftSidebar />
-        <header className="App-header">
-          <h1 className="app-title">Twitter Premier League</h1>
-        </header>
-
-        
+        <Header />
       </div>
     );
   }
