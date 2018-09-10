@@ -72,6 +72,7 @@ class MainHandler(tornado.web.RequestHandler):
                         temp_array.update({'id_str': data['id_str']})
                         temp_array.update({'name': data['user']['name']})
                         temp_array.update({'screen_name': data['user']['screen_name']})
+                        temp_array.update({'text': data["text"]})
                         temp_array.update({'location': data['user']['location']})
                         if data['user']['location'] is not None or data['user']['location'] != "":
                             try:
@@ -100,7 +101,42 @@ def main():
     ], debug=True)
 
 
+def get_json_data():
+    for filename in glob.glob('*.json'):
+        with open(filename, 'r') as outfile:
+            if outfile.name is not "data.json":
+                datas = json.load(outfile)
+                temp_array = {}
+                for data in datas["statuses"]:
+                    if data['user']['location'] is not None or data['user']['location'] != "":
+                        temp_array.update({'created_at': data['created_at']})
+                        temp_array.update({'id_str': data['id_str']})
+                        temp_array.update({'name': data['user']['name']})
+                        temp_array.update({'screen_name': data['user']['screen_name']})
+                        temp_array.update({'text': data["text"]})
+                        temp_array.update({'location': data['user']['location']})
+                        try:
+                            lat_lon = gn.geocode(data['user']['location'])
+                            temp_array.update({'latitude': str(lat_lon.latitude)})
+                            temp_array.update({'longitude': str(lat_lon.longitude)})
+                        except:
+                            temp_array.update({'latitude': ""})
+                            temp_array.update({'longitude': ""})
+                        temp_array.update({'user_mentions': data['entities']['user_mentions']})
+                        temp_array.update({'retweet_count': data['retweet_count']})
+                        temp_array.update({'favorite_count': data['favorite_count']})
+                        with open('data.json', 'a') as outfile1:
+                            outfile1.write(',')
+                            json.dump(temp_array, outfile1, indent=2)
+                            print(temp_array)
+
+    with open(my_file, 'wr') as outfile:
+        response = json.load(outfile)
+    return response
+
+
 if __name__ == "__main__":
+    data = get_json_data()
     application = main()
     application.listen(8888)
     tornado.ioloop.IOLoop.current().start()
