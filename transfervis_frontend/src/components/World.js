@@ -1,77 +1,123 @@
 import React, { Component } from 'react';
-import { geoMercator, geoPath } from "d3-geo";
-import * as d3 from 'd3';
+import {
+  ComposableMap,
+  ZoomableGroup,
+  Geographies,
+  Geography,
+  Markers,
+  Marker,
+} from "react-simple-maps";
 import { feature } from "topojson-client";
 import $ from 'jquery';
 import _ from 'lodash';
-import topology from './../assets/mapdata/110m.json';
+import ReactTooltip from "react-tooltip";
+import topology from './../assets/mapdata/50m.json';
 import geotweets from './../assets/mapdata/sampledata.json';
 // const world = topojson.feature(topology, topology.objects.units);
+const wrapperStyles = {
+  width: "100%",
+  maxWidth: 980,
+  margin: "0 auto",
+}
 
-class World extends Component {
+class WorldNoZoom extends Component {
   constructor() {
     super();
     this.state = {
       worldData: [],
       tweetData: [],
-      zoom: d3.zoom(),
-      drag: d3.drag(),
-      map: {},
-      svg: {},
-      mapZoom: {}
+      tweetCoord: [],
+      zoom: 1,
+      center: [0,20],
+      panning: true,
+      mapgrab: false
     };
 
     this.handleClick = this.handleClick.bind(this);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
     this.handleZoomIn = this.handleZoomIn.bind(this);
     this.handleZoomOut = this.handleZoomOut.bind(this);
-    this.onMapMouseWheel = this.onMapMouseWheel.bind(this);
-    this.zoomed = this.zoomed.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+    this.handleMove = this.handleMove.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
+
+  handleMouseDown(){
+    this.setState((state)=>{
+      return {mapgrab: true}
+    })
+  }
+
+  handleMouseUp(){
+    this.setState((state)=>{
+      return {mapgrab: false}
+    })
+  }
+
+  handleMove(evt){
+
+    evt.preventDefault();
+    var deltaX = evt.originalEvent.pageX;
+    var deltaY = evt.originalEvent.pageY;
+
+    if(this.state.panning && this.state.mapgrab){
+      var mouseDiffX = (this.state.center[0] - deltaX) / 10;
+      var mouseDiffY = (this.state.center[1] - deltaY)/10;
+      this.setState((state)=>{
+        return {center: [mouseDiffY, mouseDiffX]}
+      })
+    }
+  }
+
+  handleReset() {
+    this.setState({
+      center: [0,20],
+      zoom: 1,
+      panning: false
+    })
+  }
+
+  handleZoomIn() {
+    var newzoom = this.state.zoom * 2;
+    var pan = true;
+
+    if(newzoom > 4){
+      newzoom = 4;
+    }
+
+    this.setState((state)=>{
+      return {zoom: newzoom, panning: pan}
+    })
+  }
+
+  handleZoomOut() {
+    var newzoom = this.state.zoom / 2;
+    var pan = true;
+
+    if(newzoom < 1){
+      newzoom = 1;
+    }
+
+    this.setState((state)=>{
+      return {zoom: newzoom, panning: pan}
+    })
+  }
+
 
   handleClick(countryIndex) {
     console.log("Clicked on a country: ", this.state.worldData[countryIndex])
   }
 
   handleMarkerClick(markerIndex) {
-    console.log("Marker: ", this.state.tweetData[markerIndex]["name"], this.state.tweetData[markerIndex]["created_at"])
-  }
-
-  onMapMouseWheel(evt){
-      let mousezoom = evt.deltaY;
-      if(mousezoom > 0){
-          this.handleZoomOut();
-      }else{
-          this.handleZoomIn();
-      }
-  }
-
-  zoomed(evt) {
-    this.state.map.attr("transform", d3.event.transform);
-  }
-
-  projection() {
-    return geoMercator()
-      .scale(100)
-      .translate([ this.props.width / 2, this.props.height / 2 ])
-  }
-
-  handleZoomIn() {
-    // this.setState({
-    //     zoom: this.state.zoom / 0.5,
-    // });
-    this.state.mapZoom.scaleBy(this.state.svg.transition().duration(500), 1.1);
-  }
-
-  handleZoomOut() {
-      // this.setState({
-      //     zoom: this.state.zoom * 0.5,
-      // });
-      this.state.mapZoom.scaleBy(this.state.svg.transition().duration(500), 0.9);
+    console.log("Marker: ", this.state.tweetData[markerIndex]["location"], this.state.tweetData[markerIndex]["created_at"])
   }
 
   componentDidMount() {
-    console.log(topology);
+    setTimeout(() => {
+        ReactTooltip.rebuild()
+      }, 100);
+
     var newgeotweets = _.map(geotweets, (tweet, key)=>{
       var lat = parseInt(tweet.latitude);
       var lon = parseInt(tweet.longitude);
@@ -85,55 +131,87 @@ class World extends Component {
 
     var cleanTweets = _.compact(newgeotweets);
 
+    var markers = _.map(cleanTweets, (val, k)=>{
+        return [val.longitude, val.latitude];
+    });
+
     this.setState((state)=>{
       return {
         worldData: feature(topology, topology.objects.countries).features,
-        tweetData: cleanTweets,
-        map: d3.selectAll("#_world"),
-        svg: d3.select("#_mapWorld"),
-        mapZoom: d3.zoom().on("zoom", this.zoomed)
+        tweetData: cleanTweets, tweetCoord: markers, panning: false
       }
     });
   }
 
   render() {
-    console.log(this.state.tweetData);
-    // this.state.map.call(d3.zoom().on("zoom", this.zoomed));
+    $("svg").on("mousemove", this.handleMove);
+    $("svg").on("mousedown", this.handleMouseDown);
+    $("svg").on("mouseup", this.handleMouseUp);
 
   return (
-    <div id="_mapWorld" className="world-component">
-     
-      <svg id="_world" width={ this.props.width } height={ this.props.height } viewBox={ "0 0 " + (this.props.width) + " " + (this.props.height) }>
-      <g className="countries" id="_countries">
-          {
-            this.state.worldData.map((d,i) => (
-              <path
-                key={ `path-${ i }` }
-                d={ geoPath().projection(this.projection())(d) }
-                className="country"
-                onClick={ () => this.handleClick(i) }
-              />
-            ))
-          }
-        </g>
-        <g className="markers">
-          {
-            _.map(this.state.tweetData, (place, i) => (
-                <circle
-                  key={ `marker-${i}` }
-                  cx={ this.projection()([place.longitude, place.latitude])[0] }
-                  cy={ this.projection()([place.longitude, place.latitude])[1] }
-                  r={ (place.retweet_count / 2000)}
-                  fill="#E91E6344"
-                  className="marker"
-                  onClick={ () => this.handleMarkerClick(i) }
+    <div id="_mapWorld" className="world-component" style={wrapperStyles}>
+      <div className="zoomcontrol-component">
+        <div className="zoom-symbol btn" onClick={this.handleZoomIn}>
+          { "+" }
+        </div>
+        <div className="zoom-symbol btn" onClick={this.handleZoomOut}>
+          { "-" }
+        </div>
+        <div className="zoom-symbol btn" onClick={this.handleReset}>
+          { "Reset" }
+        </div>
+      
+      </div>
+
+        <ComposableMap
+          projectionConfig={{
+            scale: 205,
+          }}
+          width={980}
+          height={551}
+          style={{
+            width: "100%",
+            height: "auto"
+          }}
+          >
+          <ZoomableGroup center={this.state.center} zoom={this.state.zoom}disablePanning={()=>(this.state.panning)}>
+            <Geographies geography={topology}>
+              {(geographies, projection) => geographies.map((geography, i) => geography.id !== "ATA" && (
+                <Geography
+                  key={i}
+                  geography={geography}
+                  projection={projection}
+                  
                 />
-            ))
-          }
-        </g>
-      </svg>
+              ))}
+            </Geographies>
+            <Markers>
+              {
+                _.map(this.state.tweetData, (tweet, i) => {
+                    
+                  return(
+                    <Marker
+                      key={i}
+                      marker={{coordinates: [tweet.longitude, tweet.latitude]}}
+                      onClick={(...args)=>this.handleMarkerClick(i)}
+                      >
+                      <circle
+                        data-tip={tweet["screen_name"]}
+                        cx={0}
+                        cy={0}
+                        r={6}
+                        fill="#E91E6344"
+                      />
+                    </Marker>
+                  );
+                })
+              }
+              </Markers>
+          </ZoomableGroup>
+        </ComposableMap>
+        <ReactTooltip />
     </div>
   )
 }
 }
-export default World;
+export default WorldNoZoom;

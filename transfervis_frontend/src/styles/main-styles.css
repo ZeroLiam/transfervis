@@ -144,6 +144,7 @@ h1.app-title {
 }
 
 .searchbar {
+    z-index: 6;
     position: relative;
     top: -4rem;
     left: 5rem;
@@ -206,31 +207,4 @@ h1.app-title {
 #enable-map-btn svg {
     position: relative;
     margin: 0.1rem 1rem 0.3rem 1rem;
-}
-
-
-/* Map */
-
-.world-component {
-    position: relative;
-    top: 0;
-    left: 3rem;
-    width: 800px;
-    height: 480px;
-    border: 1px solid #01768a;
-    overflow: hidden;
-}
-
-.world-component svg {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    fill: rgba(177, 177, 177, 0.568);
-    stroke: rgb(32, 56, 66);
-}
-
-.country {
-    cursor: pointer;
 }

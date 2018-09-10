@@ -7,6 +7,7 @@
         "@fortawesome/free-brands-svg-icons": "^5.3.1",
         "@fortawesome/free-solid-svg-icons": "^5.3.1",
         "@fortawesome/react-fontawesome": "^0.1.3",
+        "@vx/geo": "0.0.170",
         "ajv": "^6.5.3",
         "ajv-keywords": "^3.2.0",
         "cities.json": "^1.1.2",
@@ -26,6 +27,7 @@
         "react-router-dom": "^4.3.1",
         "react-scripts": "^1.1.5",
         "react-simple-maps": "^0.12.1",
+        "react-tooltip": "^3.8.1",
         "sass-loader": "^7.1.0"
     },
     "scripts": {
