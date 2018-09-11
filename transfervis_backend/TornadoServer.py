@@ -182,6 +182,7 @@ def summary_json():
         json.dump(towrite2, outfile1, indent=2)
 
 
+
 if __name__ == "__main__":
     # data = get_json_data()
     summary_json()
