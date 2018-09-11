@@ -70,10 +70,10 @@ class MainHandler(tornado.web.RequestHandler):
         pass
 
     def get(self):
-        response = self.get_json_data()
-        print(response)
+        # response = self.get_json_data()
+        # print(response)
         # self.write(json.dumps(response))
-        self.render('trail.html', items=response)
+        self.render('trail.html', items='min_data.json')
 
     def get_json_data(self):
         for filename in glob.glob('*.json'):
@@ -212,7 +212,7 @@ def summary_json():
 
 if __name__ == "__main__":
     # data = get_json_data()
-    summary_json()
-    # application = main()
-    # application.listen(8888)
-    # tornado.ioloop.IOLoop.current().start()
+    # summary_json()
+    application = main()
+    application.listen(8887)
+    tornado.ioloop.IOLoop.current().start()
