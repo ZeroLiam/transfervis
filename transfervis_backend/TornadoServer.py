@@ -15,6 +15,9 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from collections import Counter
+from tempfile import mkstemp
+from shutil import move
+from os import fdopen, remove
 
 # nltk.download()
 gn = geocoders.GeoNames(username='wassabi.vl', timeout=30)
@@ -73,7 +76,7 @@ class MainHandler(tornado.web.RequestHandler):
         # response = self.get_json_data()
         # print(response)
         # self.write(json.dumps(response))
-        self.render('trail.html', items='min_data.json')
+        self.render('trail.html', items=json.dumps('min_data.json'))
 
     def get_json_data(self):
         for filename in glob.glob('*.json'):
@@ -175,44 +178,60 @@ def crappy_ntlk(text_data):
     for w in wordsFiltered:
         d = ps.stem(w)
         stem.append(d)
-    return [stem,wordsFiltered]
+    return [stem, wordsFiltered]
 
 
 def summary_json():
     with open('data.json', 'r') as outfile:
         datas = json.load(outfile)
+
+    for club in clubs:
         towrite2 = {}
-        for club in clubs:
-            towrite = {}
-            towrite1 = {}
-            for date in Dates:
-                for country1 in pycountry.countries:
-                    retweet_count = 0
-                    favorite_count = 0
-                    text = ''
-                    for data1 in datas:
-                        if club.lower() in data1["text"].lower() and (
-                                country1.alpha_2 in data1["location"][-3:] or country1.name in
-                                data1['location']) and date in data1["created_at"]:
-                            retweet_count += int(data1['retweet_count'])
-                            favorite_count += int(data1["favorite_count"])
-                            text += ' ' + data1["text"]
-                    if retweet_count is not 0 and favorite_count is not 0:
-                        [stem, words] = crappy_ntlk(text)
-                        stem_counter = Counter(stem).most_common()
-                        word_counter = Counter(words).most_common()
-                        this = {"retweet_count": retweet_count, "favorite_count": favorite_count,
-                                'words': {'stem': stem_counter, 'words': word_counter}}
-                        towrite.update({country1.name: this})
-                towrite1.update({date: towrite})
-            towrite2.update({club: towrite1})
-    with open('min_data.json', 'w') as outfile1:
-        json.dump(towrite2, outfile1, separators=(',', ':'))
+        family = []
+        towrite1 = []
+        for date in Dates:
+            towrite = []
+            for country1 in pycountry.countries:
+                retweet_count = 0
+                favorite_count = 0
+                text = ''
+
+                for data1 in datas:
+                    if club.lower() in data1["text"].lower() and (
+                            country1.alpha_2 in data1["location"][-3:] or country1.name in
+                            data1['location']) and date in data1["created_at"] and data1['id_str'] not in family:
+                        family.append( data1['id_str'])
+                        retweet_count += int(data1['retweet_count'])
+                        favorite_count += int(data1["favorite_count"])
+                        text += ' ' + data1["text"]
+                if retweet_count is not 0 or favorite_count is not 0:
+                    # [stem, words] = crappy_ntlk(text)
+                    # stem_counter = Counter(stem).most_common()
+                    # word_counter = Counter(words).most_common()
+                    this = [{'name': "retweet_count", 'size': retweet_count},
+                            {'name': "favorite_count", 'size': favorite_count}
+                            # {'name': 'words', 'children': [{'stem': stem_counter, 'words': word_counter}]}
+                            ]
+                    towrite.append({'name': country1.name, 'children': this})
+            towrite1.append({'name': date, 'children': towrite})
+        towrite2.update({'name': club, 'children': towrite1})
+        print(towrite2)
+        with open('d32.json', 'a') as outfile1:
+            json.dump(towrite2, outfile1, indent=2)
+            outfile1.write(',')
 
 
+def change_file():
+    with open('d3.json', 'r') as outfile:
+        datas = json.load(outfile)
+    for value in datas:
+        print(value)
+        for value in datas[value]:
+            print(value)
 if __name__ == "__main__":
     # data = get_json_data()
-    # summary_json()
-    application = main()
-    application.listen(8887)
-    tornado.ioloop.IOLoop.current().start()
+    summary_json()
+    # application = main()
+    # application.listen(8887)
+    # tornado.ioloop.IOLoop.current().start()
+    # change_file()
