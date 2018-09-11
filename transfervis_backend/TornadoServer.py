@@ -1,3 +1,5 @@
+import os
+import sys
 from datetime import date
 import tornado
 from tornado import ioloop, web
@@ -9,6 +11,11 @@ from geotext import GeoText
 import pycountry
 from pathlib import Path
 import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from collections import Counter
+
 # nltk.download()
 gn = geocoders.GeoNames(username='wassabi.vl', timeout=30)
 
@@ -112,7 +119,7 @@ def main():
 
 def get_json_data():
     # for filename in glob.glob('*.json'):
-    with open('SouthamptonFC.json', 'r') as outfile:
+    with open('Wolves.json', 'r') as outfile:
         datas = json.load(outfile)
         temp_array = {}
         for data in datas["statuses"]:
@@ -155,6 +162,22 @@ def get_json_data():
     return response
 
 
+def crappy_ntlk(text_data):
+    stem = []
+    ps = PorterStemmer()
+    words = word_tokenize(text_data)
+    stopWords = set(stopwords.words('english'))
+    wordsFiltered = []
+
+    for w in words:
+        if w not in stopWords:
+            wordsFiltered.append(w)
+    for w in wordsFiltered:
+        d = ps.stem(w)
+        stem.append(d)
+    return [stem,wordsFiltered]
+
+
 def summary_json():
     with open('data.json', 'r') as outfile:
         datas = json.load(outfile)
@@ -166,27 +189,30 @@ def summary_json():
                 for country1 in pycountry.countries:
                     retweet_count = 0
                     favorite_count = 0
+                    text = ''
                     for data1 in datas:
                         if club.lower() in data1["text"].lower() and (
                                 country1.alpha_2 in data1["location"][-3:] or country1.name in
                                 data1['location']) and date in data1["created_at"]:
                             retweet_count += int(data1['retweet_count'])
                             favorite_count += int(data1["favorite_count"])
+                            text += ' ' + data1["text"]
                     if retweet_count is not 0 and favorite_count is not 0:
-                        lat_lon = gn.geocode(country1.name)
-                        this = {"retweet_count": retweet_count, "favorite_count": favorite_count, "latitude":lat_lon.latitude, "longitude":lat_lon.longitude}
+                        [stem, words] = crappy_ntlk(text)
+                        stem_counter = Counter(stem).most_common()
+                        word_counter = Counter(words).most_common()
+                        this = {"retweet_count": retweet_count, "favorite_count": favorite_count,
+                                'words': {'stem': stem_counter, 'words': word_counter}}
                         towrite.update({country1.name: this})
-
                 towrite1.update({date: towrite})
             towrite2.update({club: towrite1})
     with open('min_data.json', 'w') as outfile1:
-        json.dump(towrite2, outfile1, indent=2)
-
+        json.dump(towrite2, outfile1, separators=(',', ':'))
 
 
 if __name__ == "__main__":
-    data = get_json_data()
-    # summary_json()
+    # data = get_json_data()
+    summary_json()
     # application = main()
     # application.listen(8888)
     # tornado.ioloop.IOLoop.current().start()
