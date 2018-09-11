@@ -1,7 +1,7 @@
 @import url('variables.css');
 @import url('base.css');
 .world-component {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     position: absolute;
     top: 5rem;
     left: 5rem;
