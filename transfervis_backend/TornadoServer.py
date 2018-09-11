@@ -200,17 +200,26 @@ def summary_json():
                     if club.lower() in data1["text"].lower() and (
                             country1.alpha_2 in data1["location"][-3:] or country1.name in
                             data1['location']) and date in data1["created_at"] and data1['id_str'] not in family:
-                        family.append( data1['id_str'])
+                        family.append(data1['id_str'])
                         retweet_count += int(data1['retweet_count'])
                         favorite_count += int(data1["favorite_count"])
                         text += ' ' + data1["text"]
                 if retweet_count is not 0 or favorite_count is not 0:
-                    # [stem, words] = crappy_ntlk(text)
-                    # stem_counter = Counter(stem).most_common()
-                    # word_counter = Counter(words).most_common()
+                    [stems, words] = crappy_ntlk(text)
+                    dd = []
+                    stem = []
+                    stem_counter = Counter(stems).most_common()
+                    for steams in stem_counter:
+                        stem.append({'name': steams[0], 'size': steams[1]})
+                    dd.append({'name':'stems', 'children':stem})
+                    word_counter = Counter(words).most_common()
+                    wordy = []
+                    for word in word_counter:
+                        wordy.append({'name': word[0], 'size': word[1]})
+                    dd.append({'name':'words', 'children':wordy})
                     this = [{'name': "retweet_count", 'size': retweet_count},
-                            {'name': "favorite_count", 'size': favorite_count}
-                            # {'name': 'words', 'children': [{'stem': stem_counter, 'words': word_counter}]}
+                            {'name': "favorite_count", 'size': favorite_count},
+                            {'name': 'words', 'children': dd}
                             ]
                     towrite.append({'name': country1.name, 'children': this})
             towrite1.append({'name': date, 'children': towrite})
@@ -228,6 +237,8 @@ def change_file():
         print(value)
         for value in datas[value]:
             print(value)
+
+
 if __name__ == "__main__":
     # data = get_json_data()
     summary_json()
