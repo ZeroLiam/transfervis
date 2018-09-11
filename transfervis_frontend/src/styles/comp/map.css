@@ -1,42 +1,24 @@
 @import url('variables.css');
 @import url('base.css');
-
-/* .vx-group {
-    transform-origin: 50% 50%;
-    transition: all 0.5s ease;
-} */
-
 .world-component {
-    /* border: 1px solid red; */
+    border: 1px solid red;
     position: absolute;
     top: 5rem;
-    left: -1rem;
+    left: 5rem;
     overflow: hidden;
-    width: 990px;
+    width: 870px;
     height: 530px;
-    max-width: 1200px;
-    max-height: 1680px;
+    max-width: 900px;
+    max-height: 740px;
     padding: 1rem;
     display: flex;
     justify-content: center;
 }
 
-
-/* .world-component svg {
-    border: 1px solid #2C5364;
-    position: relative;
-    top: -2rem;
-    left: 0rem;
-    width: 90%;
-    height: 90%;
-    fill: rgba(177, 177, 177, 0.568);
-    stroke: rgb(32, 56, 66);
-} */
-
 .world-component svg {
     position: relative;
-    top: -2rem;
-    left: 1%;
+    top: -3.3%;
+    left: -2rem;
     border: 1px solid #2C5364;
     fill: rgba(177, 177, 177, 0.5);
 }
@@ -49,6 +31,10 @@ svg:active {
     cursor: grabbing;
 }
 
+svg .tweeter-marker {
+    cursor: default;
+}
+
 
 /* .country {
     cursor: pointer;
@@ -56,8 +42,8 @@ svg:active {
 
 .zoomcontrol-component {
     position: relative;
-    left: -10px;
-    top: 67%;
+    left: 1.5rem;
+    top: 72%;
     z-index: 14;
     display: flex;
     flex-wrap: wrap;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import LeftSidebar from './../components/LeftSidebar';
 import Header from './../components/Header';
 import World from './../components/World';
-// import WorldFinal from './../components/WorldFinal';
 
 class Main extends Component {
 

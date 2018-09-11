@@ -8,7 +8,6 @@ import {
   Marker,
 } from "react-simple-maps";
 import { feature } from "topojson-client";
-import $ from 'jquery';
 import _ from 'lodash';
 import ReactTooltip from "react-tooltip";
 import topology from './../assets/mapdata/50m.json';
@@ -39,8 +38,17 @@ class WorldNoZoom extends Component {
     this.handleZoomOut = this.handleZoomOut.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleMove = this.handleMove.bind(this);
+    this.handleMouseWheel = this.handleMouseWheel.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+  }
+
+  handleMouseWheel(evt){
+    if(evt.deltaY > 0){
+        this.handleZoomOut();
+    }else{
+        this.handleZoomIn();
+    }
   }
 
   handleMouseDown(){
@@ -74,7 +82,8 @@ class WorldNoZoom extends Component {
     this.setState({
       center: [0,20],
       zoom: 1,
-      panning: false
+      panning: false,
+      mapgrab: false
     })
   }
 
@@ -82,8 +91,8 @@ class WorldNoZoom extends Component {
     var newzoom = this.state.zoom * 2;
     var pan = true;
 
-    if(newzoom > 4){
-      newzoom = 4;
+    if(newzoom > 8){
+      newzoom = 8;
     }
 
     this.setState((state)=>{
@@ -104,7 +113,6 @@ class WorldNoZoom extends Component {
     })
   }
 
-
   handleClick(countryIndex) {
     console.log("Clicked on a country: ", this.state.worldData[countryIndex])
   }
@@ -119,8 +127,8 @@ class WorldNoZoom extends Component {
       }, 100);
 
     var newgeotweets = _.map(geotweets, (tweet, key)=>{
-      var lat = parseInt(tweet.latitude);
-      var lon = parseInt(tweet.longitude);
+      var lat = parseFloat(tweet.latitude);
+      var lon = parseFloat(tweet.longitude);
 
       if(!isNaN(lat) && !isNaN(lon)){
         return tweet;
@@ -144,9 +152,6 @@ class WorldNoZoom extends Component {
   }
 
   render() {
-    // $("svg").on("mousemove", this.handleMove);
-    // $("svg").on("mousedown", this.handleMouseDown);
-    // $("svg").on("mouseup", this.handleMouseUp);
 
   return (
     <div id="_mapWorld" className="world-component" style={wrapperStyles}>
@@ -163,6 +168,9 @@ class WorldNoZoom extends Component {
       
       </div>
 
+      <div className="mappy"
+            onWheel={(...args)=>this.handleMouseWheel(...args)}
+            >
         <ComposableMap
             projectionConfig={{
               scale: 205,
@@ -174,13 +182,34 @@ class WorldNoZoom extends Component {
               height: "auto",
             }}
             >
-            <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
-            <Geographies geography={topology}>
+            <ZoomableGroup center={this.state.center} zoom={this.state.zoom} >
+            <Geographies geography={topology}
+            >
               {(geographies, projection) => geographies.map((geography, i) => geography.id !== "ATA" && (
                 <Geography
                   key={i}
                   geography={geography}
                   projection={projection}
+                  style={{
+                    default: {
+                      fill: "#01768AD6",
+                      stroke: "#34343477",
+                      strokeWidth: 0.5,
+                      outline: "none"
+                    },
+                    hover: {
+                      fill: "#B3F52Fee",
+                      stroke: "#FFFFFFAA",
+                      strokeWidth: 0.5,
+                      outline: "none"
+                    },
+                    pressed: {
+                      fill: "#111111AA",
+                      stroke: "#FFFFFF44",
+                      strokeWidth: 0.5,
+                      outline: "none"
+                    },
+                  }}
                   
                 />
               ))}
@@ -197,6 +226,8 @@ class WorldNoZoom extends Component {
                       >
                       <circle
                         data-tip={tweet["screen_name"]}
+                        id={i + tweet["screen_name"]}
+                        className="tweeter-marker"
                         cx={0}
                         cy={0}
                         r={6}
@@ -209,6 +240,7 @@ class WorldNoZoom extends Component {
               </Markers>
           </ZoomableGroup>
         </ComposableMap>
+        </div>
         <ReactTooltip />
     </div>
   )
