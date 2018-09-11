@@ -8,7 +8,8 @@ from geopy import geocoders
 from geotext import GeoText
 import pycountry
 from pathlib import Path
-
+import nltk
+# nltk.download()
 gn = geocoders.GeoNames(username='wassabi.vl', timeout=30)
 
 my_file = Path("data.json")
@@ -111,7 +112,7 @@ def main():
 
 def get_json_data():
     # for filename in glob.glob('*.json'):
-    with open('ManCity.json', 'r') as outfile:
+    with open('SouthamptonFC.json', 'r') as outfile:
         datas = json.load(outfile)
         temp_array = {}
         for data in datas["statuses"]:
@@ -184,8 +185,8 @@ def summary_json():
 
 
 if __name__ == "__main__":
-    # data = get_json_data()
-    summary_json()
+    data = get_json_data()
+    # summary_json()
     # application = main()
     # application.listen(8888)
     # tornado.ioloop.IOLoop.current().start()
