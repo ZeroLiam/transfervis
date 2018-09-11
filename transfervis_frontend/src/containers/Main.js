@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import LeftSidebar from './../components/LeftSidebar';
 import Header from './../components/Header';
-import WorldFinal from './../components/WorldFinal';
+import World from './../components/World';
+// import WorldFinal from './../components/WorldFinal';
 
 class Main extends Component {
 
@@ -10,7 +11,7 @@ class Main extends Component {
       <div className="App">
         <LeftSidebar />
         <Header />
-        <WorldFinal id="_worldmap" width="900" height="530" events="true" />
+        <World id="_worldmap" width="900" height="530" events="true" />
       </div>
     );
   }

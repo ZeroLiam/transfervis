@@ -12,7 +12,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import ReactTooltip from "react-tooltip";
 import topology from './../assets/mapdata/50m.json';
-import geotweets from './../assets/mapdata/sampledata.json';
+import geotweets from './../assets/mapdata/sampledata2.json';
 // const world = topojson.feature(topology, topology.objects.units);
 const wrapperStyles = {
   width: "100%",
@@ -144,9 +144,9 @@ class WorldNoZoom extends Component {
   }
 
   render() {
-    $("svg").on("mousemove", this.handleMove);
-    $("svg").on("mousedown", this.handleMouseDown);
-    $("svg").on("mouseup", this.handleMouseUp);
+    // $("svg").on("mousemove", this.handleMove);
+    // $("svg").on("mousedown", this.handleMouseDown);
+    // $("svg").on("mouseup", this.handleMouseUp);
 
   return (
     <div id="_mapWorld" className="world-component" style={wrapperStyles}>
@@ -164,17 +164,17 @@ class WorldNoZoom extends Component {
       </div>
 
         <ComposableMap
-          projectionConfig={{
-            scale: 205,
-          }}
-          width={980}
-          height={551}
-          style={{
-            width: "100%",
-            height: "auto"
-          }}
-          >
-          <ZoomableGroup center={this.state.center} zoom={this.state.zoom}disablePanning={()=>(this.state.panning)}>
+            projectionConfig={{
+              scale: 205,
+            }}
+            width={980}
+            height={551}
+            style={{
+              width: "100%",
+              height: "auto",
+            }}
+            >
+            <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
             <Geographies geography={topology}>
               {(geographies, projection) => geographies.map((geography, i) => geography.id !== "ATA" && (
                 <Geography

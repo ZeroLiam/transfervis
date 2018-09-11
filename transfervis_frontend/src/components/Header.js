@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import _ from 'lodash';
 
 class LeftSidebar extends Component{
@@ -16,10 +15,10 @@ class LeftSidebar extends Component{
         let arr = [];
         let r = require.context("./../assets/logos", false, /.*\.png$/);
 
-        r.keys().map((item, index) => {
+        arr = r.keys().map((item, index) => {
                 var keyname = item.replace(/\.\/\d+_/, '').replace('.png', '');
                 images[keyname] = r(item);
-                arr.push(r(item));
+                return r(item);
             });
         this.setState((state)=>{
             return {imgs: arr, imgsrc: images};
@@ -38,7 +37,7 @@ class LeftSidebar extends Component{
                            if(k > 0){
                             return(
                                 <li className="header-team" key={k}>
-                                    <img src={it} />
+                                    <img alt={"team-logo-" + k} src={it} />
                                 </li>
                                 );
                             };

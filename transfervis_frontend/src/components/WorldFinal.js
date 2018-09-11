@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { geoMercator, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
+import $ from 'jquery';
 import _ from 'lodash';
 import ReactTooltip from 'react-tooltip';
 import wd from './../assets/mapdata/50m.json';
@@ -21,7 +22,9 @@ class WorldFinal extends Component {
       panning: true,
       startMove: 0,
       maptaken: false,
-      translation: [0,0]
+      translation: [360, 265],
+      past: [0,0],
+      released: false
     };
 
     this.handleCountryClick = this.handleCountryClick.bind(this);
@@ -36,11 +39,13 @@ class WorldFinal extends Component {
   }
 
   projection() {
-    var base = this.state.scaleval, propw = this.state.scaleval + ((this.state.wval * 100) / this.state.scaleval), proph = this.state.scaleval + ((this.state.hval * 100) / this.state.scaleval);
+    var base = this.state.scaleval; 
+    // var propw = this.state.scaleval + ((this.state.wval * 100) / this.state.scaleval), proph = this.state.scaleval + ((this.state.hval * 100) / this.state.scaleval);
 
     return geoMercator()
       .scale(base)
-      .translate([ propw / 2, proph / 2 ])
+      .translate([this.state.translation[0], this.state.translation[1]])
+      // .translate([ propw / 2, proph / 2 ])
   }
   handleCountryClick(countryIndex) {
     console.log("Clicked on country: ", this.state.worldData[countryIndex])
@@ -51,6 +56,7 @@ class WorldFinal extends Component {
 
   onMapMouseWheel(evt){
     var mousezoom = evt.deltaY;
+
       if(mousezoom > 0){
           this.handleZoomOut();
       }else{
@@ -59,27 +65,43 @@ class WorldFinal extends Component {
   }
 
   onMapTaken(evt){
-      var deltaX = evt.pageX;
-      var deltaY = evt.pageY;
+    var deltaX = evt.pageX;
+    var deltaY = evt.pageY;
+    var offset = $("#_mapWorldSVG").offset();
+    var divPos = {
+        x: deltaX - offset.left,
+        y: deltaY - offset.top
+    };
 
       this.setState((state) => {
-          
-          return {maptaken: true, center: [deltaX, deltaY]}
-        });
+        var newtrans = [state.translation[0] - divPos.x, state.translation[1] - divPos.y];
+
+        var updatePos = state.released ? state.translation : newtrans;
+
+          return {maptaken: true, translation: [divPos.x, divPos.y], past:[divPos.x, divPos.y]}
+      });
   }
 
   onMapRelease(evt){
-    var deltaX = evt.pageX;
-    var deltaY = evt.pageY;
 
       this.setState((state) => {
-          return {maptaken: false, startMove: 0, center: [deltaX, deltaY]}
+          return {maptaken: false, startMove: 0, translation: state.translation, released: true}
         });
   }
 
   onMapMove(evt){
     var deltaX = evt.pageX;
     var deltaY = evt.pageY;
+    var offset = $("#_mapWorldSVG").offset();
+    var divPos = {
+        x: deltaX - offset.left,
+        y: deltaY - offset.top
+    };
+
+    console.log("from svg: ", offset);
+    console.log("from mouse diff: ", divPos);
+    console.log("from translation: ", this.state.translation);
+
       var enabledZoom = this.state.zoom > 1;
 
       if(this.state.maptaken){
@@ -88,13 +110,12 @@ class WorldFinal extends Component {
           });
 
           if(this.state.startMove > 1 && enabledZoom){
-              var mouseDiffX = (this.state.center[0] - deltaX) * this.state.zoom;
-              var mouseDiffY = (this.state.center[1] - deltaY) * this.state.zoom;
+              // var mouseDiffX = (this.state.center[0] - deltaX);
+              // var mouseDiffY = (this.state.center[1] - deltaY);
 
               this.setState((state) => {
-                  
-                  return {translation: [-1 * mouseDiffX, -1 * mouseDiffY]}
-                });
+                  return {translation: [360 + (divPos.x), 265 + (divPos.y)], center: divPos}
+              });
           }
           
       }
@@ -102,16 +123,16 @@ class WorldFinal extends Component {
 
   handleReset(evt) {
       this.setState((state)=>{
-         return {zoom: 1, scaleval: 120, wval: 720, hval: 530}
+         return {zoom: 1, scaleval: 120, wval: 720, hval: 530, translation: [360,265]}
       });
   }
 
   handleZoomIn(evt) {
       this.setState((state)=>{
-        var newzoom = state.zoom + 0.5;
+        var newzoom = state.zoom + 25;
 
-        if(newzoom > 3){
-          newzoom = 3;
+        if(newzoom > 200){
+          newzoom = 200;
         }
           return {zoom: newzoom, scaleval: state.scaleval + newzoom}
       });
@@ -119,7 +140,7 @@ class WorldFinal extends Component {
 
   handleZoomOut(evt) {
       this.setState((state)=>{
-        var newzoom = state.zoom - 0.5;
+        var newzoom = state.zoom - 25;
 
         if(newzoom < 0.8){
           newzoom = 0.8;
@@ -135,8 +156,8 @@ class WorldFinal extends Component {
       }, 100);
 
     var newgeotweets = _.map(geotweets, (tweet, key)=>{
-      var lat = parseInt(tweet.latitude);
-      var lon = parseInt(tweet.longitude);
+      var lat = parseFloat(tweet.latitude);
+      var lon = parseFloat(tweet.longitude);
       
       if(!isNaN(lat) && !isNaN(lon)){
         return tweet;
@@ -146,7 +167,8 @@ class WorldFinal extends Component {
     var cleanTweets = _.compact(newgeotweets);
 
       this.setState({
-        worldData: feature(wd, wd.objects.countries).features, tweetData: cleanTweets
+        worldData: feature(wd, wd.objects.countries).features, tweetData: cleanTweets,
+        translation: [360, 265]
       })
   }
 
@@ -157,11 +179,6 @@ class WorldFinal extends Component {
   }
 
   render() {
-    
-    var zoomStyle = {
-        transform: 'scale(' + this.state.zoom + ') translate(' + this.state.translation[0] + 'px, ' + this.state.translation[1] + 'px)',
-        transition: "all 0.3 ease-in"
-    }
 
   return (
     <div id="_mapWorld" className="world-component">
@@ -178,11 +195,16 @@ class WorldFinal extends Component {
       
       </div>
 
-      <svg id="_mapWorldSVG" onWheel={(...args)=> this.onMapMouseWheel(...args)} 
-    onMouseDown={(...args)=> this.onMapTaken(...args)}
-    onMouseUp={(...args)=> this.onMapRelease(...args)}
-    onMouseMove={(...args)=> this.onMapMove(...args)}
-          width={ this.state.wval } height={ this.state.hval } viewBox={"0 0 " + this.state.wval + " " + this.state.hval}>
+      <svg id="_mapWorldSVG"
+      width={ this.state.wval }
+      height={ this.state.hval }
+      viewBox={"0 0 " + this.state.wval + " " + this.state.hval}
+      onMouseDown={(...args)=>this.onMapTaken(...args)}
+      onMouseUp={(...args)=>this.onMapRelease(...args)}
+      onMouseMove={(...args)=>this.onMapMove(...args)}
+      onWheel={(...args)=>this.onMapMouseWheel(...args)}
+      >
+
         <g className="countries">
           {
             this.state.worldData.map((d,i) => (
@@ -221,7 +243,7 @@ class WorldFinal extends Component {
                 />
                 )
               }
-              
+              return null;
             })
           }
         </g>
