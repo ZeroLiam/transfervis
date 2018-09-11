@@ -76,7 +76,7 @@ class TwitterApi:
 
 
 # twitter_api = TwitterApi('@LFC', 50, "liverpool", 50)
-# TwitterApi('#LFC').results()
+# TwitterApi('@LFC').results()
 # TwitterApi('@premierleague').results()
 # TwitterApi('@ChelseaFC').results()
 # TwitterApi('@WatfordFC').results()
