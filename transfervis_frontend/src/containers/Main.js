@@ -21,6 +21,7 @@ class Main extends Component {
 
   getTeamData(team){
     console.log(team);
+    // eslint-disable-next-line
     this.setState({activeteam: parseInt(team)});
   }
 
