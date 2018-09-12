@@ -32,7 +32,6 @@ class LeftSidebar extends Component{
                 <header className="App-header">
                     <h1 className="app-title">Twitter Premier League</h1>
                     <ul className="header-menu">
-                        <li className="header-team"><b>ALL</b></li>
                         {_.map(this.state.imgs, (it, k)=>{
                            if(k > 0){
                             return(

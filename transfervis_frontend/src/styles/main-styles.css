@@ -1,5 +1,7 @@
+@import url('./comp/colors.css');
 @import url('./comp/variables.css');
 @import url('./comp/base.css');
+@import url('./comp/treemap.css');
 @import url('./comp/map.css');
 
 /* Body and HTML */
@@ -207,4 +209,94 @@ h1.app-title {
 #enable-map-btn svg {
     position: relative;
     margin: 0.1rem 1rem 0.3rem 1rem;
+}
+
+
+/* Top Tweets component */
+
+.top-tweets-component {
+    position: relative;
+    top: 0.2rem;
+    left: 70%;
+    width: 28%;
+    min-width: 20%;
+    max-height: 500px;
+    height: 100%;
+    background-color: #FFFFFF44;
+    color: white;
+    overflow-y: scroll;
+}
+
+.tweets-tabs {
+    position: fixed;
+    z-index: 10;
+    width: 385px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+    background-color: #ffffff;
+}
+
+.all-tweets{
+    margin-top: 50px;
+}
+
+.tab {
+    position: relative;
+    padding: 4px;
+    margin: 2px;
+    width: 50%;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.tab:hover,
+.active-tab {
+    background-color: #07a3beb2;
+    transition: all 0.3 ease-in;
+}
+
+.tab h6 {
+    color: #01768a;
+    font-weight: 300;
+}
+
+.tab:hover h6,
+.active-tab h6 {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.top-tweets-container {
+    border-bottom-color: #203A43;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding: 0.2rem 1.2rem;
+    margin: 0.9rem;
+}
+
+.icon-tweet-username,
+.icon-tweet-location,
+.icon-tweet-count,
+.icon-tweet-likes {
+    margin: 2px 10px 2px 4px;
+}
+
+.meta-icon{
+    color: #B3F52F;
+    margin: 0 2px 0 0;
+}
+
+.tweet-text {
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.tweet-meta {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+    margin: 2px 0 0 0;
+    font-size: 0.9rem;
 }

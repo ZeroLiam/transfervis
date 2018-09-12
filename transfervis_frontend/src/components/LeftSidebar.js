@@ -14,7 +14,8 @@ class LeftSidebar extends Component{
         super(props);
 
         this.state = {
-            openSearch: true
+            openSearch: true,
+            activevis: "diagram"
         };
 
         this.onIconClick = this.onIconClick.bind(this);
@@ -28,6 +29,16 @@ class LeftSidebar extends Component{
             $(".searchbar").hide();
             $("#search-btn").removeClass("hover");
         }
+
+        if(this.state.activevis === "world"){
+            $("#enable-diagram-btn svg").removeClass("active-feature");
+            $("#enable-map-btn svg").addClass("active-feature");
+        }else if(this.state.activevis === "diagram"){
+            $("#enable-diagram-btn svg").addClass("active-feature");
+            $("#enable-map-btn svg").removeClass("active-feature");
+        }
+
+        this.props.receiveActiveType(this.state.activevis);
     }
 
     onIconClick(evt){
@@ -47,9 +58,16 @@ class LeftSidebar extends Component{
                 $("#search-btn").removeClass("hover");
             }
         }else if(evt.target.id === "enable-map-btn"){
-            $("#enable-map-btn svg").toggleClass("active-feature");
-        }else if(evt.target.id === "enable-sankey-btn"){
-            $("#enable-sankey-btn svg").toggleClass("active-feature");
+            $("#enable-diagram-btn svg").removeClass("active-feature");
+            $("#enable-map-btn svg").addClass("active-feature");
+            this.setState({activevis: "world"});
+            this.props.receiveActiveType(this.state.activevis);
+
+        }else if(evt.target.id === "enable-diagram-btn"){
+            $("#enable-diagram-btn svg").addClass("active-feature");
+            $("#enable-map-btn svg").removeClass("active-feature");
+            this.setState({activevis: "diagram"});
+            this.props.receiveActiveType(this.state.activevis);
         }
     }
 
@@ -82,16 +100,14 @@ class LeftSidebar extends Component{
                     </div>
                 </div>
 
-                {/* Toggle Sankey View */}
-                <div className="left-sidebar-container" id="left-toggle-sankey">
-                    <div className="left-sidebar-icon" id="enable-sankey-btn"
+                {/* Toggle Diagram View */}
+                <div className="left-sidebar-container" id="left-toggle-diagram">
+                    <div className="left-sidebar-icon" id="enable-diagram-btn"
                     onClick={(...args)=> this.onIconClick(...args)}>
                             <FontAwesomeIcon icon={faPollH} />
                             <span className="icon-left-title">Diagram</span>
                         </div>
                 </div>
-
-
             </div>
         );
     }

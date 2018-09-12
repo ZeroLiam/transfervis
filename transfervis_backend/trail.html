@@ -75,7 +75,7 @@
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.json('data.json', function(error, cars) {
+    d3.json('./data.json', function(error, cars) {
         if (error) throw error;
         console.log(cars);
         // Extract the list of dimensions and create a scale for each.
