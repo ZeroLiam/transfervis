@@ -11,8 +11,7 @@ import { feature } from "topojson-client";
 import _ from 'lodash';
 import ReactTooltip from "react-tooltip";
 import topology from './../assets/mapdata/50m.json';
-import geotweets from './../assets/mapdata/sampledata2.json';
-// const world = topojson.feature(topology, topology.objects.units);
+
 const wrapperStyles = {
   width: "100%",
   maxWidth: 980,
@@ -126,7 +125,7 @@ class WorldNoZoom extends Component {
         ReactTooltip.rebuild()
       }, 100);
 
-    var newgeotweets = _.map(geotweets, (tweet, key)=>{
+    var newgeotweets = _.map(this.props.team, (tweet, key)=>{
       var lat = parseFloat(tweet.latitude);
       var lon = parseFloat(tweet.longitude);
 
@@ -217,7 +216,7 @@ class WorldNoZoom extends Component {
             <Markers>
               {
                 _.map(this.state.tweetData, (tweet, i) => {
-                    
+                    var txt = "<h6>"+ tweet["screen_name"] +"</h6><p>"+ tweet["text"]+"</p>";
                   return(
                     <Marker
                       key={i}
@@ -225,7 +224,7 @@ class WorldNoZoom extends Component {
                       onClick={(...args)=>this.handleMarkerClick(i)}
                       >
                       <circle
-                        data-tip={tweet["screen_name"]}
+                        data-tip={txt} data-html={true} data-multiline={true}
                         id={i + tweet["screen_name"]}
                         className="tweeter-marker"
                         cx={0}

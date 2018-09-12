@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import $ from 'jquery';
 import Tweet from './ui/Tweet';
-import geotweets from './../assets/mapdata/sampledata2.json';
 
 class TopTweets extends Component{
     constructor(props){
@@ -19,7 +18,7 @@ class TopTweets extends Component{
     }
 
     componentDidMount() {
-        var newgeotweets = _.map(geotweets, (tweet, key)=>{
+        var newgeotweets = _.map(this.props.team, (tweet, key)=>{
             var lat = parseFloat(tweet.latitude);
             var lon = parseFloat(tweet.longitude);
       
@@ -74,7 +73,7 @@ class TopTweets extends Component{
 
                 outputSorted.push(obj);
             }
-            console.log(outputSorted);
+            
             return _.map(outputSorted, (v,k)=>{
                     return(
                         <Tweet key={k} id={v._id} text={v.text} location={v.location} username={v.username} count={v.count} likes={v.likes} />

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import $ from 'jquery';
 
 class LeftSidebar extends Component{
     constructor(props){
@@ -9,7 +10,15 @@ class LeftSidebar extends Component{
             imgs: [],
             imgsrc:{}
         }
+
+        this.loadTeam =this.loadTeam.bind(this);
     }
+
+    loadTeam(evt){
+        var team = evt;
+        this.props.receiveTeam(team.match(/\d+$/)[0]);
+    }
+
     componentDidMount() {
         let images = {};
         let arr = [];
@@ -26,7 +35,7 @@ class LeftSidebar extends Component{
      }
 
     render(){
-        
+
         return(
             <div>
                 <header className="App-header">
@@ -35,8 +44,8 @@ class LeftSidebar extends Component{
                         {_.map(this.state.imgs, (it, k)=>{
                            if(k > 0){
                             return(
-                                <li className="header-team" key={k}>
-                                    <img alt={"team-logo-" + k} src={it} />
+                                <li id={"team-" + k} onClick={e => this.loadTeam(e.target.id)} className="header-team" key={k}>
+                                    <img id={"team-img-" + k} alt={"team-logo-" + k} src={it} />
                                 </li>
                                 );
                             };

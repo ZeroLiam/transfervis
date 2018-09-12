@@ -29,7 +29,7 @@ class Treemap extends Component {
                 labelFormat=".0s"
                 labelSkipSize={12}
                 labelTextColor="#ffffff"
-                colors="purpleRed_green"
+                colors="purple_orange"
                 colorBy="name"
                 borderColor="inherit:darker(0.3)"
                 animate={true}
