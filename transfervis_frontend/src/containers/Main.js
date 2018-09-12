@@ -1,36 +1,64 @@
 import React, { Component } from 'react';
-import SearchCard from './../components/SearchCard';
-import _ from 'lodash';
+import LeftSidebar from './../components/LeftSidebar';
+import Header from './../components/Header';
+import World from './../components/World';
+import Treemap from './../components/Treemap';
+import TopTweets from './../components/TopTweets';
+import geotweets from './../assets/mapdata/sampledata2.json';
 
 class Main extends Component {
-    constructor(props){
-        super(props);
+  constructor(props){
+    super(props);
 
-        this.state = {
-            data: [
-                {assetId: 0, title: "Position", alt:"position", data:["Goalkeeper", "Defender", "Midfielder", "Striker"]},
-                {assetId: 1, title: "Chemistry Style", alt:"playstyles", data:["BASIC", "SNIPER", "FINISHER", "DEADEYE"]},
-                {assetId: 2, title: "Nation", alt:"nation", data:["Argentina", "Brasil", "England", "Germany"]},
-                {assetId: 3, title: "League", alt:"league", data:["Argentina Apertura", "Liga do Brasil", "Premier League", "Bundesliga"]},
-                {assetId: 4, title: "Price", alt:"price", data:[0, 1000, 150, 1500]}
-            ]
-        }
+    this.state = {
+      activevistype: "diagram",
+      activeteam: 1
     }
 
+    this.receivedType = this.receivedType.bind(this);
+    this.getTeamData = this.getTeamData.bind(this);
+  }
+
+  getTeamData(team){
+    console.log(team);
+    this.setState({activeteam: parseInt(team)});
+  }
+
+  receivedType(typedata){
+    
+    this.setState((state) => {
+        state.activevistype = typedata;
+
+        return state;
+     });
+}
+
+componentDidMount(){
+  console.log(this.state.activevistype);
+  console.log(this.state.activeteam);
+  
+}
+
   render() {
-      
+    let teamjson = geotweets;
+    let diag;
+    if (this.state.activevistype === "world") {
+      diag = <World team={teamjson} id="_worldmap" width="900" height="530" events="true" />;
+    } else {
+      diag = <Treemap id="_treemap" />;
+    }
+
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>Welcome to React</h1>
-        </header>
-        <div className="search-container">
-            {_.map(this.state.data, (val, key)=>{
-                return(
-                    <SearchCard key={key} id={key} title={val.title} alt={val.alt} cardData={val} />
-                );
-            })}
+        <LeftSidebar receiveActiveType={(...args)=>this.receivedType(...args)} />
+        <Header receiveTeam={(...args)=>this.getTeamData(...args)} />
+        
+        <div id="_viscontainer">
+          {diag}
         </div>
+
+        <TopTweets team={teamjson} id="_tweetsContainer" maxTweets="20" minTweets="10" />
+      
       </div>
     );
   }
