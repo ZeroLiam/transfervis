@@ -6,8 +6,6 @@ import Treemap from './../components/Treemap';
 import TopTweets from './../components/TopTweets';
 import geotweets from './../assets/mapdata/sampledata2.json';
 
-import team1 from './../assets/twitterdata/sampledata3.json';
-
 class Main extends Component {
   constructor(props){
     super(props);
