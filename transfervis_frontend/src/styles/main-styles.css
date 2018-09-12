@@ -216,7 +216,7 @@ h1.app-title {
 
 .top-tweets-component {
     position: relative;
-    top: 0.2rem;
+    top: 6rem;
     left: 70%;
     width: 28%;
     min-width: 20%;
@@ -237,7 +237,7 @@ h1.app-title {
     background-color: #ffffff;
 }
 
-.all-tweets{
+.all-tweets {
     margin-top: 50px;
 }
 
@@ -282,7 +282,7 @@ h1.app-title {
     margin: 2px 10px 2px 4px;
 }
 
-.meta-icon{
+.meta-icon {
     color: #B3F52F;
     margin: 0 2px 0 0;
 }
@@ -299,4 +299,13 @@ h1.app-title {
     text-align: right;
     margin: 2px 0 0 0;
     font-size: 0.9rem;
+}
+
+
+/* CONTAINER */
+
+#_viscontainer {
+    position: relative;
+    top: 1rem;
+    left: -2rem;
 }
