@@ -191,13 +191,13 @@ class WorldNoZoom extends Component {
                   projection={projection}
                   style={{
                     default: {
-                      fill: "#01768AD6",
+                      fill: "rgb(158, 202, 225)",
                       stroke: "#34343477",
                       strokeWidth: 0.5,
                       outline: "none"
                     },
                     hover: {
-                      fill: "#B3F52Fee",
+                      fill: "rgb(116, 196, 118)",
                       stroke: "#FFFFFFAA",
                       strokeWidth: 0.5,
                       outline: "none"
